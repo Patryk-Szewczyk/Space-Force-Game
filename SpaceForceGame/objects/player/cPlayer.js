@@ -22,7 +22,7 @@ class Player {
     MoveDownBlock = false;
     MoveLeftBlock = false;
     MoveRightBlock = false;
-    isBorder = [];  // false | [value, value]
+    isBorder = [];  // false | [value] | [value]
     ShootingLoop = false;
     fireRate = 0.7;  // dealy between shots in seconds (begin: 0.7 | min: 0.1)
     bulletLifeTime = 1.5;  // ['bullet'] transition-duration
@@ -121,37 +121,29 @@ class Player {
                 break;
         }
     }
-    #detectBorder() {  // todo fix this
-        const playerTop = getStyleTop(this.player);
-        const playerBottom = getStyleBottom(this.player);
-        const playerLeft = getStyleLeft(this.player);
-        const playerRight = getStyleRight(this.player);
+    #detectBorder() {  // todo optimalize followed code esteticy
         this.isBorder = [];
-        if (playerTop < 15) {
+        if (getStyleTop(this.player) < 15) {
             this.#playerMove('ArrowUp', true);
             if (!this.isBorder.includes('top')) {
-                // console.log('top');
                 this.isBorder.push('top');
             }
         }
-        if (playerBottom < 30) {
+        if (getStyleBottom(this.player) < 30) {
             this.#playerMove('ArrowDown', true);
             if (!this.isBorder.includes('bottom')) {
-                // console.log('bottom');
                 this.isBorder.push('bottom');
             }
         }
-        if (playerLeft < 15) {
+        if (getStyleLeft(this.player) < 15) {
             this.#playerMove('ArrowLeft', true);
             if (!this.isBorder.includes('left')) {
-                // console.log('left');
                 this.isBorder.push('left');
             }
         }
-        if (playerRight < 15) {
+        if (getStyleRight(this.player) < 15) {
             this.#playerMove('ArrowRight', true);
             if (!this.isBorder.includes('right')) {
-                // console.log('right');
                 this.isBorder.push('right');
             }
         }
@@ -171,7 +163,7 @@ class Player {
                 playerPosition = this.#beforeFirstMove();
                 this.#fireBullet(playerPosition);
             } else {
-                this.#fireBullet([this.playerPosition.left, this.playerPosition.top]);
+                this.#fireBullet(this.playerPosition);
             }
         }, this.fireRate * 1000);
     }
@@ -180,15 +172,21 @@ class Player {
     }
     #beforeFirstMove() {
         let position = { left: getStyleLeft(this.player), top: getStyleTop(this.player) };
-        return [position.left, position.top];
+        return position;
     }
     #fireBullet(playerPosition) {
-        // console.log(playerPosition[0]);
-        // console.log(playerPosition[1] + '\n\n');
         const bullet = document.createElement('div');
         bullet.setAttribute('class', 'bullet');
-        bullet.style.left = (playerPosition[0] + (getStyleWidth(this.player) / 2)) + 'px';
-        bullet.style.top = playerPosition[1] + 'px';
+        
+        let bulletPositionCorrect = 0;
+        if (this.key == 'ArrowLeft') {
+            bulletPositionCorrect = -5;
+        } else if (this.key == 'ArrowRight') {
+            bulletPositionCorrect = 5;
+        }
+
+        bullet.style.left = (playerPosition.left + bulletPositionCorrect + (getStyleWidth(this.player) / 2)) + 'px';
+        bullet.style.top = playerPosition.top + 'px';
         this.player.appendChild(bullet);
 
         setInterval(() => {
