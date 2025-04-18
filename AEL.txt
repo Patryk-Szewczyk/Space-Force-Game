@@ -1,0 +1,19 @@
+GRACZ:
+
+1. AEL: Sprawdzam czy pozycja danego strzału gracza znajdzie się na pozycji jakiegokolwiek wroga.
+        -> Usuwam ten pocisk (który dotknął wroga).
+
+2. AEL: Sprawdzam czy na pozycji gracza znajdzie się jakikolwiek pocisk wroga.
+	-> Pobieram klasę typu tego pocisku.
+        -> Na jej podstawie aktualizuję wskaźnik HP gracza i sprawdzam czy osiągnął 0%.
+
+
+
+WRÓG:
+
+1. AEL: Sprawdzam czy na pozycji wroga znajdzie się jakikolwiek pocisk gracza.
+	-> Pobieram klasę typu tego pocisku.
+        -> Na jej podstawie aktualizuję wskaźnik HP wroga i sprawdzam czy osiągnął 0%.
+
+2. AEL: Sprawdzam czy pozycja danego strzału wroga znajdzie się na pozycji gracza.
+        -> Usuwam ten pocisk (który dotknął gracza).
